@@ -24,6 +24,10 @@ func main() {
 
 	fmt.Println("ping succeeded")
 
+	fmt.Println("pool stats")
+	fmt.Println(pool.Stat().IdleConns())
+	fmt.Println(pool.Stat().MaxConns())
+
 	_, err = pool.Exec(context.Background(), "CREATE TABLE ORDERS (amount int, product_name varchar(10))")
 	if err != nil {
 		fmt.Println(err)
@@ -43,6 +47,10 @@ func main() {
 		go countProducts(pool, &wg)
 	}
 	wg.Wait()
+
+	fmt.Println("pool stats")
+	fmt.Println(pool.Stat().IdleConns())
+	fmt.Println(pool.Stat().MaxConns())
 }
 
 func insertProduct(product string, pool *pgxpool.Pool, wg *sync.WaitGroup) {
